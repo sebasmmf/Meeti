@@ -1,4 +1,5 @@
 const express = require('express');
+const expressLayouts = require('express-ejs-layouts');
 const path = require('path');
 require('dotenv').config({path: 'variables.env'});
 const router = require('./routes');
@@ -6,6 +7,7 @@ const router = require('./routes');
 const app = express();
 
 // Habilitar EJS como template engine
+app.use(expressLayouts)
 app.set('view engine', 'ejs');
 
 // Ubicacion Vistas
@@ -13,6 +15,13 @@ app.set('views', path.join(__dirname, './views'));
 
 // Archivos estaticos
 app.use(express.static('public'));
+
+// Middleware (usuario logueado, flash messages, fecha actual)
+app.use((req, res, next) => {
+    const fecha = new Date();
+    res.locals.year = fecha.getFullYear();
+    next();
+});
 
 // Routing
 app.use('/', router());
