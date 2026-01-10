@@ -4,6 +4,11 @@ const path = require('path');
 require('dotenv').config({path: 'variables.env'});
 const router = require('./routes');
 
+const db = require('./config/db');
+require('./models/Usuarios');
+
+db.sync().then(() => console.log('DB Conectada')).catch(error => console.log(error));
+
 const app = express();
 
 // Habilitar EJS como template engine
